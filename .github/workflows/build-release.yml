@@ -1,0 +1,79 @@
+name: Build and release gem
+
+on:
+  release:
+    types:
+      - published
+
+env:
+  GEM_NAME: dry-cli-completion
+  RUBY_VERSION: 3.1.2
+  VERSION: ${{github.event.release.tag_name}}
+
+jobs:
+  build:
+    name: Build gem
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{env.RUBY_VERSION}}
+
+    - name: Build ${{env.VERSION}}
+      run: |
+        gem build $GEM_NAME.gemspec
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{env.GEM_NAME}}-${{env.VERSION}}
+        path: '*.gem'
+
+  publish:
+    name: Publish to RubyGems.org
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: ${{env.GEM_NAME}}-${{env.VERSION}}
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{env.RUBY_VERSION}}
+
+    - name: Publish ${{env.VERSION}}
+      run: |
+        gem push $GEM_NAME-${VERSION:1}.gem
+      env:
+        GEM_HOST_API_KEY: ${{secrets.RUBYGEMS_AUTH_TOKEN}}
+        GEM_NAME: ${{env.GEM_NAME}}
+        VERSION: ${{env.VERSION}}
+
+  publish_gpr:
+    name: Publish to GitHub Packages
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: ${{env.GEM_NAME}}-${{env.VERSION}}
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{env.RUBY_VERSION}}
+
+    - name: Publish ${{env.VERSION}}
+      run: |
+        gem push $GEM_NAME-${VERSION:1}.gem
+      env:
+        GEM_HOST_API_KEY: Bearer ${{secrets.GITHUB_TOKEN}}
+        RUBYGEMS_HOST: https://rubygems.pkg.github.com/${{github.repository_owner}}
+        GEM_NAME: ${{env.GEM_NAME}}
+        VERSION: ${{env.VERSION}}

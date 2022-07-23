@@ -1,0 +1,20 @@
+FROM ruby:2.7-slim
+
+RUN set -ex \
+    && apt update \
+    && apt install -y --no-install-recommends build-essential git
+
+RUN mkdir /app
+
+COPY Gemfile *.lock *.gemspec /app/
+COPY lib/dry/cli/completion/version.rb /app/lib/dry/cli/completion/
+
+WORKDIR /app
+RUN bundle install
+RUN bundle binstubs --all --path /bin
+
+COPY . /app
+
+ENV HISTCONTROL=ignoreboth:erasedups
+
+ENTRYPOINT ["bash"]
