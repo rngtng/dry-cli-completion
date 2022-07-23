@@ -1,0 +1,88 @@
+name: Build and release gem
+
+on:
+  release:
+    types:
+      - published
+
+env:
+  GEM_NAME: dry-cli-completion
+  RUBY_VERSION: 3.1.2
+  VERSION: ${{github.event.release.tag_name}}
+
+jobs:
+  validate_tag:
+    name: Validate Tagname
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Validate tag pattern: ${{ env.VERSION }}'
+        run: |
+          if [[ $VERSION =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "Valid tagname, continue release"
+          else
+            echo "Invalid tagname, needs doesn't follow pattern: v<Semver>"
+            exit 1
+          fi
+
+  build:
+    name: Build gem
+    needs: validate_tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{env.RUBY_VERSION}}
+
+    - name: Build ${{env.VERSION}}
+      run: |
+        gem build $GEM_NAME.gemspec
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{env.GEM_NAME}}-${{env.VERSION}}
+        path: '*.gem'
+
+  publish:
+    name: Publish to RubyGems.org
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: ${{env.GEM_NAME}}-${{env.VERSION}}
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{env.RUBY_VERSION}}
+
+    - name: Publish ${{env.VERSION}}
+      run: |
+        gem push $GEM_NAME-${VERSION:1}.gem
+      env:
+        GEM_HOST_API_KEY: ${{secrets.RUBYGEMS_AUTH_TOKEN}}
+
+  publish_gpr:
+    name: Publish to GitHub Packages
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: ${{env.GEM_NAME}}-${{env.VERSION}}
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{env.RUBY_VERSION}}
+
+    - name: Publish ${{env.VERSION}}
+      run: |
+        gem push $GEM_NAME-${VERSION:1}.gem
+      env:
+        GEM_HOST_API_KEY: Bearer ${{secrets.GITHUB_TOKEN}}
+        RUBYGEMS_HOST: https://rubygems.pkg.github.com/${{github.repository_owner}}
