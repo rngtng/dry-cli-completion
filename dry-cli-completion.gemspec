@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/rngtng/dry-cli-completion"
   spec.metadata["changelog_uri"] = "https://github.com/rngtng/dry-cli-completion/CHANGELOG.md"
 
-  spec.files = Dir['lib/**/*'] + %w(Gemfile LICENSE README.md CHANGELOG.md dry-cli-completion.gemspec)
+  spec.files = Dir["lib/**/*"] + %w(Gemfile LICENSE README.md CHANGELOG.md dry-cli-completion.gemspec)
   spec.require_paths = ["lib"]
 
   spec.add_dependency "completely", "~> 0.4"
