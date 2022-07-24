@@ -11,6 +11,18 @@ env:
   VERSION: ${{github.event.release.tag_name}}
 
 jobs:
+  check_tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check tag ${{ env.VERSION }}
+        run: |
+          if [[${{ env.VERSION }} =~ v[0-9]+\.[0-9]+\.0\.[0-9]+ ]]; then
+            echo "valid tagname, continue release"
+          else
+            echo "invalid tagname, needs to follow this pattern: v<Semver>"
+            exit 1
+          fi
+
   build:
     name: Build gem
     runs-on: ubuntu-latest
