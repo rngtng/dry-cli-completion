@@ -37,6 +37,8 @@ For local development, this project comes with a Dockerimage and Makefile. After
 make build dev
 ```
 
-Then, run `rake spec` to run the tests.
+Then, run `rspec` to run the tests.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To release a new version, update the version number in `version.rb`, push commits to GitHub and then create a release. This will create a git tag for the version, and push the `.gem` file to [rubygems.org](https://rubygems.org) as well as GitHub packages.
+See GitHub actions for more.
+
