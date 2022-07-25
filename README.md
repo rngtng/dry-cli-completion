@@ -26,7 +26,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add the completion command to you existing commands like:
+
+```
+
+```
 
 ## Development
 
