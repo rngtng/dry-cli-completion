@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  lint-test-build:
     runs-on: ubuntu-latest
     name: Ruby ${{ matrix.ruby }}
     strategy:
@@ -31,9 +31,30 @@ jobs:
 
     - name: Run linter
       run: bundle exec rubocop
+    - uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{secrets.GITHUB_TOKEN}}
+        context: 'Lint run'
+        description: 'Passed'
+        state: 'success'
+        sha: ${{github.event.pull_request.head.sha || github.sha}}
 
     - name: Run tests
-      run: bundle exec rspec
+      run: bundle exec rspec && exit 1
+    - uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{secrets.GITHUB_TOKEN}}
+        context: 'Test run'
+        description: 'Passed'
+        state: 'success'
+        sha: ${{github.event.pull_request.head.sha || github.sha}}
 
     - name: Build gem
       run: gem build *.gemspec
+    - uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{secrets.GITHUB_TOKEN}}
+        context: 'Build run'
+        description: 'Passed'
+        state: 'success'
+        sha: ${{github.event.pull_request.head.sha || github.sha}}
