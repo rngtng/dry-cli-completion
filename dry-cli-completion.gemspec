@@ -4,7 +4,7 @@ require_relative "lib/dry/cli/completion/version"
 
 Gem::Specification.new do |spec|
   spec.name = "dry-cli-completion"
-  spec.version = Dry::Cli::Completion::VERSION
+  spec.version = Dry::CLI::Completion::VERSION
   spec.authors = ["rngtng"]
   spec.email = ["tobi@rngtng.com"]
   spec.licenses = ["MIT"]

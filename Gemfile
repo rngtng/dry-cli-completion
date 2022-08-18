@@ -8,3 +8,4 @@ gemspec
 gem "rspec", "~> 3.0"
 gem "standard"
 gem "dry-cli"
+gem "pry"

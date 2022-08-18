@@ -1,4 +1,4 @@
-# Dry::Cli::Completion
+# Dry::CLI::Completion
 
 Dry::CLI Command to generate a completion script for bash/zsh
 
