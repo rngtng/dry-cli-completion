@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 require_relative "completion/version"
+require_relative "completion/generator"
 
 module Dry
-  module Cli
+  class CLI
     module Completion
-      class Error < StandardError; end
-      # Your code goes here...
+      BASH = "bash"
+      ZSH = "zsh"
     end
   end
 end
