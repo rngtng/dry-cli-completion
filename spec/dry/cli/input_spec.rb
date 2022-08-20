@@ -88,6 +88,25 @@ RSpec.describe Dry::CLI::Completion::Input do
               "foo" => ["command", "help"]
             })
           end
+
+          context "when multiple arguments with values are given" do
+            before do
+              command.argument "a2", type: :string, values: %w[v3 v4]
+            end
+
+            it do
+              is_expected.to eq({
+                "foo command" => ["v1", "v2", "--help"],
+                "foo command*v1" => ["v3", "v4", "--help"],
+                "foo command*v1*v3" => ["--help"],
+                "foo command*v1*v4" => ["--help"],
+                "foo command*v2" => ["v3", "v4", "--help"],
+                "foo command*v2*v3" => ["--help"],
+                "foo command*v2*v4" => ["--help"],
+                "foo" => ["command", "help"]
+              })
+            end
+          end
         end
 
         context "when include_aliases is true" do
@@ -161,8 +180,8 @@ RSpec.describe Dry::CLI::Completion::Input do
 
           it do
             is_expected.to eq({
-              "foo command" => ["--help", "--o1", "--ao1"],
-              "foo alias" => ["--help", "--o1", "--ao1"],
+              "foo command" => ["--help", "--o1", "-ao1"],
+              "foo alias" => ["--help", "--o1", "-ao1"],
               "foo" => ["command", "alias", "help"]
             })
           end

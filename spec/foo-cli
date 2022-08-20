@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require_relative "./foo"
+
+Dry::CLI.new(Foo::CLI::Commands).call

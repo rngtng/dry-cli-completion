@@ -12,7 +12,8 @@ module Dry
           @program_name = program_name || Dry::CLI::ProgramName.call
         end
 
-        def call(shell: BASH, include_aliases: false, out: StringIO.new)
+        def call(shell:, include_aliases: false, out: StringIO.new)
+          raise ArgumentError, "Unknown shell" unless SUPPORTED_SHELLS.include?(shell)
           if shell == ZSH
             out.puts "# enable bash completion support, see https://github.com/dannyben/completely#completions-in-zsh"
             out.puts "autoload -Uz +X compinit && compinit"
