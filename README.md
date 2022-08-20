@@ -76,7 +76,7 @@ class MyCommand < Dry::CLI::Command
   desc "Custom completion script command"
 
   def call(**)
-    script = Generator.new(MyRegistry).call(shell: "bash")
+    script = Dry::CLI::Completion::Generator.new(MyRegistry).call(shell: "bash")
     # ... further processing here ...
     puts script
   end
@@ -86,6 +86,11 @@ end
 ### 3. Input layer
 Lastly, if the script generation input needs to be adjusted, leverage the input layer. Here the commands, arguments, options and their values/types extracted and put in an input format for `completely`. See [completely Readme](https://github.com/dannyben/completely) for details.
 
+```ruby
+input = Dry::CLI::Completion::Input.new(MyRegistry, "foo").call(include_aliases: false)
+# ... further processing here ...
+puts Completely::Completions.new(input)
+```
 
 ## Development
 For local development, this project comes dockerized - with a Dockerimage and Makefile. After checking out the repo, run the following to enter development console:
@@ -102,9 +107,9 @@ The gem comes with a full-fledged rspec testsuite. To execute all tests run in d
 ### Manual Testing
 The foo registry is used in unit test is available as `spec/foo-cli` for manual testing. First source the comepltion script:
 
-    $ source <(spec/foo-cli completion)
+    $ source <(spec/foo-cli completion bash)
 
-Then try the tab completion yourself, t:
+Then try the tab completion yourself:
 
 ```sh
 $ spec/foo-cli <tab>
