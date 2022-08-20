@@ -7,7 +7,7 @@ RSpec.describe Dry::CLI::Completion::Command do
     Dry::CLI.new(Foo::CLI::Commands).call(arguments: arguments)
   end
 
-  let(:arguments) { %w[completion] }
+  let(:arguments) { %w[completion bash] }
 
   it "prints script to stdout" do
     expect { subject }.to output(/'completion'\*'bash'/).to_stdout
@@ -30,10 +30,18 @@ RSpec.describe Dry::CLI::Completion::Command do
   end
 
   context "when with include alises given" do
-    let(:arguments) { %w[completion -a] }
+    let(:arguments) { %w[completion -a bash] }
 
     it "prints script with aliases to stdout" do
       expect { subject }.to output(/'v'\*\)/).to_stdout
+    end
+  end
+
+  context "when no shell given" do
+    let(:arguments) { %w[completion] }
+
+    it "raises error" do
+      expect { subject }.to raise_error(ArgumentError, "missing keyword: :shell")
     end
   end
 end

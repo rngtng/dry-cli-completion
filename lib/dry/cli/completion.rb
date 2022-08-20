@@ -6,8 +6,10 @@ require_relative "completion/generator"
 module Dry
   class CLI
     module Completion
-      BASH = "bash"
-      ZSH = "zsh"
+      SUPPORTED_SHELLS = [
+        BASH = "bash",
+        ZSH = "zsh"
+      ]
     end
   end
 end

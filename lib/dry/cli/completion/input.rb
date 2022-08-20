@@ -32,24 +32,34 @@ module Dry
         end
 
         def command(command, include_aliases: false)
-          options = {
-            "--help" => []
-          }
-
-          command.options.each do |o|
-            options["--#{o.name}"] = values(o)
-            o.aliases.each { |a| options["--#{a}"] = values(o) } if include_aliases
-          end
           {
-            options: options,
-            arguments: command.arguments.map { |a| [a.name, values(a)] }
-          }
+            options: {
+              "--help" => []
+            },
+            arguments: command.arguments.map { |arg|
+              [arg.name, argument_values(arg)]
+            }
+          }.tap do |hash|
+            command.options.each do |opt|
+              hash[:options]["--#{opt.name}"] = option_values(opt)
+              next unless include_aliases
+              opt.aliases.each { |arg|
+                hash[:options]["-#{arg}"] = option_values(opt)
+              }
+            end
+          end
         end
 
-        def values(option_or_argument)
-          return ["<file>"] if option_or_argument.name.to_s.include?("path")
-          return option_or_argument.values if option_or_argument.values
-          return [] if option_or_argument.type != :boolean
+        def argument_values(argument)
+          return ["<file>"] if argument.name.to_s.include?("path")
+          return argument.values if argument.values
+          nil
+        end
+
+        def option_values(option)
+          return ["<file>"] if option.name.to_s.include?("path")
+          return option.values if option.values
+          return [] if option.type != :boolean
           nil
         end
 
