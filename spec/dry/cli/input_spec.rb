@@ -188,5 +188,24 @@ RSpec.describe Dry::CLI::Completion::Input do
         end
       end
     end
+
+    context "when registry contains subcommands" do
+      let(:subcommand) { Class.new(Dry::CLI::Command) }
+
+      before do
+        registry.register "prefix" do |prefix|
+          prefix.register "subcommand", subcommand
+        end
+      end
+
+      it do
+        is_expected.to eq({
+          "foo" => ["prefix", "help"],
+          "foo prefix" => ["subcommand"],
+          "foo prefix subcommand" => ["--help"],
+          "foo prefix*subcommand" => []
+        })
+      end
+    end
   end
 end

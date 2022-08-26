@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "input"
 require "completely"
 
 module Dry
   class CLI
     module Completion
       class Generator
+        require_relative "input"
+
         def initialize(registry, program_name: nil)
           @registry = registry
           @program_name = program_name || Dry::CLI::ProgramName.call

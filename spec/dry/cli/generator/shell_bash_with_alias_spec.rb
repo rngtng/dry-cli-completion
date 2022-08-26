@@ -27,8 +27,16 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --include_aliases -a" -- "$cur" )
             ;;
 
+          'generate config'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --apps" -- "$cur" )
+            ;;
+
           'completion'*'zsh')
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --include_aliases -a" -- "$cur" )
+            ;;
+
+          'generate test'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --framework" -- "$cur" )
             ;;
 
           'completion'*)
@@ -39,8 +47,20 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help" -- "$cur" )
             ;;
 
+          'generate'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "config test" -- "$cur" )
+            ;;
+
+          'g config'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --apps" -- "$cur" )
+            ;;
+
           'version'*)
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help" -- "$cur" )
+            ;;
+
+          'g test'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --framework" -- "$cur" )
             ;;
 
           'start'*)
@@ -67,8 +87,12 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help" -- "$cur" )
             ;;
 
+          'g'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "config test" -- "$cur" )
+            ;;
+
           *)
-            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "version echo start stop exec completion v -v --version help" -- "$cur" )
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "version echo start stop exec completion generate v -v --version g help" -- "$cur" )
             ;;
 
         esac
