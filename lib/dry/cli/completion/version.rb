@@ -3,7 +3,7 @@
 module Dry
   class CLI
     module Completion
-      VERSION = "0.9.0-alpha"
+      VERSION = "1.0.0-beta1"
     end
   end
 end
