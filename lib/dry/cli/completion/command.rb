@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "dry/cli/completion"
-
 module Dry
   class CLI
     module Completion
+      require "dry/cli/completion"
+
       class Command < Dry::CLI::Command
         desc "Print tab completion script for given shell"
 

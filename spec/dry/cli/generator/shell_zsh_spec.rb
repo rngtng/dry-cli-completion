@@ -27,12 +27,24 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --include_aliases" -- "$cur" )
             ;;
 
+          'generate config'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --apps" -- "$cur" )
+            ;;
+
           'completion'*'zsh')
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --include_aliases" -- "$cur" )
             ;;
 
+          'generate test'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "--help --framework" -- "$cur" )
+            ;;
+
           'completion'*)
             while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "bash zsh --help --include_aliases" -- "$cur" )
+            ;;
+
+          'generate'*)
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "config test" -- "$cur" )
             ;;
 
           'version'*)
@@ -56,7 +68,7 @@ RSpec.describe Dry::CLI::Completion::Generator do
             ;;
 
           *)
-            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "version echo start stop exec completion help" -- "$cur" )
+            while read; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "version echo start stop exec completion generate help" -- "$cur" )
             ;;
 
         esac

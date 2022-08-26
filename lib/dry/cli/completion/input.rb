@@ -10,22 +10,35 @@ module Dry
         end
 
         def call(include_aliases:)
-          nodes = root_node.children.dup
-          nodes.merge!(root_node.aliases.dup) if include_aliases
-
-          commands = nodes.each_with_object({}) do |(name, sub_node), hash|
-            next unless sub_node.command
-            hash[name] = command(sub_node.command, include_aliases: include_aliases)
-          end
-
+          commands = extract_commands(root_node, include_aliases: include_aliases)
           commands.each_with_object({
-            @program_name => commands.keys + ["help"]
+            @program_name => commands.keys.map(&:first).uniq + ["help"]
           }) do |(name, config), input|
-            input_line(input, "#{@program_name} #{name}", config[:arguments].shift, config)
+            input_line(input, "#{@program_name} #{name.join(" ")}", config[:arguments].shift, config)
           end
         end
 
         private
+
+        def extract_commands(parent_node, include_aliases:, prefix: [])
+          nodes = parent_node.children.dup
+          nodes.merge!(parent_node.aliases.dup) if include_aliases
+
+          nodes.each_with_object({}) do |(name, sub_node), hash|
+            key = prefix.dup << name
+            hash[key] = if sub_node.command
+              command(sub_node.command, include_aliases: include_aliases)
+            elsif sub_node.children
+              hash.merge!(extract_commands(sub_node, include_aliases: include_aliases, prefix: key))
+              {
+                options: {},
+                arguments: [
+                  ["subcommands", sub_node.children.keys]
+                ]
+              }
+            end
+          end
+        end
 
         def root_node
           @registry.get({}).instance_variable_get(:@node)
