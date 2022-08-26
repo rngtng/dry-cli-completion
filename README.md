@@ -38,12 +38,18 @@ Simplest usage is to drop in the `Dry::CLI::Completion::Command` to your existin
 module MyRegistry
   extend Dry::CLI::Registry
 
-   register "cmd1", MyCmd1
-   #....
+  register "cmd1", MyCmd1
+  #....
 
-   register "completion", Dry::CLI::Completion::Command[self]
-  end
+  register "completion", Dry::CLI::Completion::Command[self]
 end
+```
+
+or extend the registry subsequently:
+
+```ruby
+#....
+MyRegistry.register("completion", Dry::CLI::Completion::Command[MyRegistry])
 ```
 
 This will extend your cli for a new command `completion` with following usage:
