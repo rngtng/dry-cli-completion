@@ -111,7 +111,7 @@ The gem comes with a full-fledged rspec testsuite. To execute all tests run in d
     $ rspec
 
 ### Manual Testing
-The foo registry is used in unit test is available as `spec/foo-cli` for manual testing. First source the comepltion script:
+The `Foo::CLI::Command` registry used in unit test is available as `spec/foo-cli` for manual testing. First source the completion script:
 
     $ source <(spec/foo-cli completion bash)
 
