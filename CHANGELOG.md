@@ -1,4 +1,5 @@
 # CHANGELOG
+## 1.0.0 Inital release
 
 ## 1.0.0-beta Add support for subcommands
 
