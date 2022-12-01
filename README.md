@@ -35,6 +35,8 @@ The gems architecture consits of three layers which each abstracts & simplifies 
 Simplest usage is to drop in the `Dry::CLI::Completion::Command` to your existing registry:
 
 ```ruby
+require "dry/cli/completion/command"
+
 module MyRegistry
   extend Dry::CLI::Registry
 
@@ -78,6 +80,8 @@ Examples:
 In case you want to change/extend the completion script, create a custom command and leverage just the generator:
 
 ```ruby
+require "dry/cli/completion"
+
 class MyCommand < Dry::CLI::Command
   desc "Custom completion script command"
 
@@ -93,6 +97,8 @@ end
 Lastly, if the script generation input needs to be adjusted, leverage the input layer. Here the commands, arguments, options and their values/types extracted and put in an input format for `completely`. See [completely Readme](https://github.com/dannyben/completely) for details.
 
 ```ruby
+require "dry/cli/completion"
+
 input = Dry::CLI::Completion::Input.new(MyRegistry, "foo").call(include_aliases: false)
 # ... further processing here ...
 puts Completely::Completions.new(input)
