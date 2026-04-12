@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "dry/cli"
+
 module Dry
   class CLI
     module Completion
