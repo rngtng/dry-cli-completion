@@ -6,12 +6,12 @@ source "https://rubygems.org"
 gemspec
 
 group :runtime do
-  gem 'completely', '~> 0.7'
-  gem 'dry-cli', '~> 1.4'
+  gem "completely", "~> 0.7"
+  gem "dry-cli", "~> 1.4"
 end
 
 group :development do
-  gem 'pry', '~> 0.16'
-  gem 'rspec', '~> 3.13'
-  gem 'standard', '~> 1.54'
+  gem "pry", "~> 0.16"
+  gem "rspec", "~> 3.13"
+  gem "standard", "~> 1.54"
 end
