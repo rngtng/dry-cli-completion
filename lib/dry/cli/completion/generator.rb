@@ -2,6 +2,7 @@
 
 require "completely"
 require "stringio"
+require "dry/cli/program_name"
 
 module Dry
   class CLI
