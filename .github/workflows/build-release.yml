@@ -31,11 +31,12 @@ jobs:
     permissions:
       contents: read
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{env.RUBY_VERSION}}
+        bundler-cache: true
 
     - name: Build ${{env.VERSION}}
       run: |
@@ -50,6 +51,9 @@ jobs:
     name: Publish to RubyGems.org
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
     - uses: actions/download-artifact@v4
       with:
@@ -59,11 +63,11 @@ jobs:
       with:
         ruby-version: ${{env.RUBY_VERSION}}
 
+    - uses: rubygems/configure-rubygems-credentials@main
+
     - name: Publish ${{env.VERSION}}
       run: |
         gem push ${{env.GEM_NAME}}*.gem
-      env:
-        GEM_HOST_API_KEY: ${{secrets.RUBYGEMS_AUTH_TOKEN}}
 
   publish_gpr:
     name: Publish to GitHub Packages
