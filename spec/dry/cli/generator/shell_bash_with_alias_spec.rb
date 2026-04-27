@@ -14,8 +14,13 @@ RSpec.describe Dry::CLI::Completion::Generator do
     is_expected.to include <<~SCRIPT
       _rspec_completions() {
         local cur=${COMP_WORDS[COMP_CWORD]}
-        local compwords=("${COMP_WORDS[@]:1:$COMP_CWORD-1}")
+        local compwords=()
+        if ((COMP_CWORD > 0)); then
+          compwords=("${COMP_WORDS[@]:1:$((COMP_CWORD - 1))}")
+        fi
         local compline="${compwords[*]}"
+
+        COMPREPLY=()
 
         case "$compline" in
           'completion'*'bash')
@@ -42,12 +47,12 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
-          'generate'*)
-            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "config test")" -- "$cur")
-            ;;
-
           'g config'*)
             while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --apps")" -- "$cur")
+            ;;
+
+          'generate'*)
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "config test")" -- "$cur")
             ;;
 
           'version'*)
@@ -62,7 +67,7 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
-          'echo'*)
+          'exec'*)
             while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
@@ -70,7 +75,7 @@ RSpec.describe Dry::CLI::Completion::Generator do
             while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --graceful")" -- "$cur")
             ;;
 
-          'exec'*)
+          'echo'*)
             while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
@@ -92,7 +97,7 @@ RSpec.describe Dry::CLI::Completion::Generator do
 
         esac
       } &&
-      complete -F _rspec_completions rspec
+        complete -F _rspec_completions rspec
 
       # ex: filetype=sh
     SCRIPT
