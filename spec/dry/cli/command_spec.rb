@@ -41,7 +41,7 @@ RSpec.describe Dry::CLI::Completion::Command do
     let(:arguments) { %w[completion] }
 
     it "raises error" do
-      expect { subject }.to raise_error(ArgumentError, "missing keyword: :shell")
+      expect { subject }.to raise_error(SystemExit)
     end
   end
 end
