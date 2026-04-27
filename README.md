@@ -141,7 +141,7 @@ See GitHub actions in `.github` for more.
 
 This library officially supports the following Ruby versions:
 
-* MRI `>= 2.7.0`
+* MRI `>= 3.3.0`
 
 ## License
 

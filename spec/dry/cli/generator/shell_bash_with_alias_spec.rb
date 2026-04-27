@@ -14,85 +14,90 @@ RSpec.describe Dry::CLI::Completion::Generator do
     is_expected.to include <<~SCRIPT
       _rspec_completions() {
         local cur=${COMP_WORDS[COMP_CWORD]}
-        local compwords=("${COMP_WORDS[@]:1:$COMP_CWORD-1}")
+        local compwords=()
+        if ((COMP_CWORD > 0)); then
+          compwords=("${COMP_WORDS[@]:1:$((COMP_CWORD - 1))}")
+        fi
         local compline="${compwords[*]}"
+
+        COMPREPLY=()
 
         case "$compline" in
           'completion'*'bash')
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --include_aliases -a")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --include_aliases -a")" -- "$cur")
             ;;
 
           'generate config'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --apps")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --apps")" -- "$cur")
             ;;
 
           'completion'*'zsh')
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --include_aliases -a")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --include_aliases -a")" -- "$cur")
             ;;
 
           'generate test'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --framework")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --framework")" -- "$cur")
             ;;
 
           'completion'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "bash zsh --help --include_aliases -a")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "bash zsh --help --include_aliases -a")" -- "$cur")
             ;;
 
           '--version'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
-            ;;
-
-          'generate'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "config test")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
           'g config'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --apps")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --apps")" -- "$cur")
+            ;;
+
+          'generate'*)
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "config test")" -- "$cur")
             ;;
 
           'version'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
           'g test'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --framework")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --framework")" -- "$cur")
             ;;
 
           'start'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
-            ;;
-
-          'echo'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
-            ;;
-
-          'stop'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help --graceful")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
           'exec'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
+            ;;
+
+          'stop'*)
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help --graceful")" -- "$cur")
+            ;;
+
+          'echo'*)
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
           '-v'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
           'v'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "--help")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "--help")" -- "$cur")
             ;;
 
           'g'*)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "config test")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "config test")" -- "$cur")
             ;;
 
           *)
-            while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "$(_rspec_completions_filter "version echo start stop exec completion generate v -v --version g help")" -- "$cur" )
+            while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rspec_completions_filter "version echo start stop exec completion generate v -v --version g help")" -- "$cur")
             ;;
 
         esac
       } &&
-      complete -F _rspec_completions rspec
+        complete -F _rspec_completions rspec
 
       # ex: filetype=sh
     SCRIPT

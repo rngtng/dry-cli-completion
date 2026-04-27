@@ -7,7 +7,7 @@ on:
 
 env:
   GEM_NAME: dry-cli-completion
-  RUBY_VERSION: 3.1.2
+  RUBY_VERSION: 4.0.2
   VERSION: ${{github.event.release.tag_name}}
 
 jobs:

@@ -23,7 +23,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir["lib/**/*"] + %w[Gemfile LICENSE README.md CHANGELOG.md dry-cli-completion.gemspec]
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 2.7.6"
+  spec.required_ruby_version = ">= 3.3.0"
 
-  spec.add_dependency "completely", "~> 0.5"
+  spec.add_dependency "completely", "~> 0.7"
+  spec.add_dependency "dry-cli", "~> 1.4"
 end
